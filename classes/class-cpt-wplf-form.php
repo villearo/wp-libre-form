@@ -42,7 +42,7 @@ class CPT_WPLF_Form {
     add_shortcode( 'libre-form', array( $this, 'shortcode' ) );
     add_action( 'wp', array( $this, 'maybe_set_404_for_single_form' ) );
     add_filter( 'the_content', array( $this, 'use_shortcode_for_preview' ), 0 );
-    add_action( 'wp_enqueue_scripts', array( $this, 'maybe_enqueue_frontend_script' ) );
+    //add_action( 'wp_enqueue_scripts', array( $this, 'maybe_enqueue_frontend_script' ) );
 
     // default filters for the_content, but we don't want to use actual the_content
     add_filter( 'wplf_form', 'convert_smilies' );
@@ -789,7 +789,8 @@ class CPT_WPLF_Form {
       $output = ob_get_clean();
 
       // enqueue our footer script here
-      wp_enqueue_script( 'wplf-form-js' );
+      //wp_enqueue_script( 'wplf-form-js' );
+      $this->enqueue_frontend_script();
 
       return $output;
     }
@@ -802,11 +803,11 @@ class CPT_WPLF_Form {
   /**
    * Enqueue the front end JS
    */
-  public function maybe_enqueue_frontend_script() {
+  public function enqueue_frontend_script() {
     global $post;
 
     // register the script, but only enqueue it if the current post contains a form in it
-    wp_register_script(
+    wp_enqueue_script(
       'wplf-form-js',
       plugins_url( 'assets/scripts/wplf-form.js', dirname( __FILE__ ) ),
       apply_filters( 'wplf_frontend_script_dependencies', array() ),
